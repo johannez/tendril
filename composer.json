@@ -18,8 +18,8 @@
     "kint-php/kint": "^3.2"
   },
   "scripts": {
-    "copy-theme": [
-      "echo testing"
+    "post-install-cmd": [
+      "bash install.sh"
     ]
   }
 }
