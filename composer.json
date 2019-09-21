@@ -1,9 +1,9 @@
 {
-  "name": "johannez/tendril",
-  "description": "Wordpress site building with timber and tailwindcss.",
+  "name": "johannez/tendril-library",
+  "description": "Wordpress library based on Timber.",
   "license": "MIT",
   "type": "library",
-  "homepage": "https://github.com/johannez/tendril",
+  "homepage": "https://github.com/johannez/tendril-library",
   "authors": [
     {
       "name": "Johannes Schmidt",
