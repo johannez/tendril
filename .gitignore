@@ -17,3 +17,14 @@ wp-content/plugins/hello.php
 /sitemap.xml
 /sitemap.xml.gz
 
+# OS generated files #
+######################
+.DS_Store*
+ehthumbs.db
+Thumbs.db
+._*
+
+
+# SASS #
+##########
+.sass-cache
