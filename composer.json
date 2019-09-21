@@ -16,10 +16,5 @@
   },
   "require-dev": {
     "kint-php/kint": "^3.2"
-  },
-  "scripts": {
-    "post-install-cmd": [
-      "bash install.sh"
-    ]
   }
 }
