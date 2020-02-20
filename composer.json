@@ -16,5 +16,10 @@
   },
   "require-dev": {
     "kint-php/kint": "^3.2"
-  }
+  },
+  "autoload": {
+    "psr-4": {
+      "Tendril\\": "src/"
+    }
+  },
 }
