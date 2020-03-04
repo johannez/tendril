@@ -5,9 +5,12 @@ namespace Tendril;
 use \Timber\Menu;
 
 use Tendril\Controllers\Controller;
+use Tendril\Traits\Block;
 
 class Site extends \Timber\Site
 {
+    use Block;
+
     protected $controllers = [];
 
     public function __construct() 
@@ -31,7 +34,6 @@ class Site extends \Timber\Site
         add_action('admin_menu', function() {
             remove_menu_page( 'edit.php' );
         });
-
 
 
         add_action('wp_enqueue_scripts', function() {
@@ -61,6 +63,14 @@ class Site extends \Timber\Site
     public function getJsVars()
     {
         return [];
+    }
+
+    /**
+     * Get brand colors for the Wordpress backend.
+     */
+    public function getColors()
+    {
+      return [];
     }
 
     /**
@@ -152,6 +162,23 @@ class Site extends \Timber\Site
         // Add default posts and comments RSS feed links to head.
         add_theme_support( 'automatic-feed-links' );
 
+        // Disable Custom Colors
+        add_theme_support('disable-custom-colors');
+
+        // Load brand colors.
+        if ($colors = $this->getColors()) {
+            $colors_formatted = [];
+            foreach ($colors as $name => $code) {
+                $colors_formatted[] = [
+                    'name' => $name,
+                    'slug' => sanitize_title($name),
+                    'color' => $code
+                ];
+            }
+
+            add_theme_support('editor-color-palette', $colors_formatted);
+        }
+
         /*
          * Let WordPress manage the document title.
          * By adding theme support, we declare that this theme does not use a
@@ -224,42 +251,6 @@ class Site extends \Timber\Site
             // 'acf/two-columns'
         ];
     }
-
-    public function getBlocks($content)
-    {   
-        $blocks = [];
-        $blocks_raw = parse_blocks($content);
-
-        foreach ($blocks_raw as $block) {
-            if (!empty($block['blockName'])) {
-                $classes = [
-                    'block',
-                    'block--' . sanitize_title($block['blockName'])
-                ];
-                $content = render_block($block);
-
-                if (count($block['attrs'])) {
-                    foreach ($block['attrs'] as $key => $value) {
-                        if ($key == 'className') {
-                            $classes[] = $value;
-                        }
-                    }
-                }
-
-                $b = [
-                    'name' => $block['blockName'],
-                    'classes' => $classes,
-                    'attributes' => $block['attrs'],
-                    'content' => $content
-                ];
-
-                $blocks[] = $b;
-            }
-        }
-
-        return $blocks;
-    }
-
 
     /** 
      * This is where you can add your own functions to twig.
