@@ -7,12 +7,12 @@ use \Timber\Menu;
 use Tendril\Controllers\Controller;
 
 use Tendril\Traits\Block;
-use Tendril\Traits\Menu;
+use Tendril\Traits\Menu as MenuTrait;
 
 class Site extends \Timber\Site
 {
     use Block,
-        Menu;
+        MenuTrait;
 
     protected $controllers = [];
 
