@@ -5,11 +5,14 @@ namespace Tendril;
 use \Timber\Menu;
 
 use Tendril\Controllers\Controller;
+
 use Tendril\Traits\Block;
+use Tendril\Traits\Menu;
 
 class Site extends \Timber\Site
 {
-    use Block;
+    use Block,
+        Menu;
 
     protected $controllers = [];
 
