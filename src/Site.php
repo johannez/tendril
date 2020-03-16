@@ -41,7 +41,6 @@ class Site extends \Timber\Site
 
         add_action('wp_enqueue_scripts', function() {
 
-            wp_enqueue_style('fonts_css', get_template_directory_uri() .  '/public/fonts/styles.css');
             wp_enqueue_style('vendor_css', get_template_directory_uri() .  '/public/css/vendor.css');
             wp_enqueue_style('app_css', get_template_directory_uri() .  '/public/css/app.css');
 

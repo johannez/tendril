@@ -30,4 +30,26 @@ Trait Migration
 
         return $data;
     }
+
+    /**
+     * Get existing post by legacy id.
+     *
+     * @param $source_id    Legacy id.
+     * @param $field        Name of the legacy field in the database.
+     */
+    public function getExistingPost($source_id, $field = 'source_id')
+    {
+        global $wpdb;
+
+        $posts_table = $wpdb->prefix . 'posts';
+        $meta_table = $wpdb->prefix . 'postmeta';
+
+        $query_existing = "SELECT post_id
+            FROM {$meta_table} meta
+            JOIN {$posts_table} posts ON posts.ID = meta.post_id
+            WHERE posts.post_type = '{$post_type}' AND meta.meta_key = '{$field}' AND meta.meta_value = {$source_id} 
+            AND posts.post_status = 'publish'";
+
+        return $wpdb->get_var($query_existing);
+    }
 }
