@@ -6,13 +6,11 @@ use \Timber\Menu;
 
 use Tendril\Controllers\Controller;
 
-use Tendril\Traits\Block;
 use Tendril\Traits\Menu as MenuTrait;
 
 class Site extends \Timber\Site
 {
-    use Block,
-        MenuTrait;
+    use MenuTrait;
 
     protected $controllers = [];
 
@@ -261,7 +259,7 @@ class Site extends \Timber\Site
     public function addToTwig($twig) 
     {
         // $twig->addExtension( new \Twig\Extension\StringLoaderExtension() );
-        $twig->addFunction(new \Twig\TwigFunction('get_blocks', [$this, 'getBlocks']));
+        $twig->addFunction(new \Twig\TwigFunction('get_blocks', ['Tendril\Block', 'getBlocks']));
         $twig->addFilter( new \Twig\TwigFilter( 'relative_links', [$this, 'relativeLinks'] ) );
         return $twig;
     }
