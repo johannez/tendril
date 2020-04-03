@@ -53,6 +53,12 @@ class Site extends \Timber\Site
         add_filter('timber/twig', [$this, 'addToTwig']);
         add_filter('allowed_block_types', [$this, 'allowedBlocks']);
 
+        add_filter('upload_mimes', function($upload_mimes) {
+            $upload_mimes['svg'] = 'image/svg+xml'; 
+            $upload_mimes['svgz'] = 'image/svg+xml'; 
+            return $upload_mimes; 
+        }, 10, 1 );
+
         $this->addImageSizes();
     }
 
