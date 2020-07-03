@@ -1,6 +1,6 @@
 <?php
 
-namespace Tendril;
+namespace Tendril\Blocks;
 
 use Timber\Core;
 use Timber\CoreInterface;

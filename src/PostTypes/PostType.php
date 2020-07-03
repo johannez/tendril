@@ -3,13 +3,10 @@
  * Base class for all controllers.
  */
 
-namespace Tendril\Controllers;
+namespace Tendril\PostTypes;
 
-abstract class Controller
+abstract class PostType
 {
-  // protected $core;
-  // protected $filters_allowed = [];
-
   /**
    * Identify yourself.
    */
@@ -17,59 +14,12 @@ abstract class Controller
   /**
    * Register the post type and related taxonomy.
    */
-  abstract public function registerPostType();
-
-  /**
-   * Register the related taxonomy.
-   */
-  public function registerTaxonomy() {}
+  abstract public function register();
 
   /**
    * Add post type specific shortcodes.
    */
   public function addShortCodes() {}
-
-  public function filterRedirect()
-  {
-    $filters = [];
-    $redirect = wp_make_link_relative($_POST['redirect']);
-
-    foreach ($_POST as $name => $value) {
-      if (!empty($value) && in_array($name, $this->filters_allowed)) {
-        if (is_array($value)) {
-          $filters[$name] = implode('+', esc_sql($value));
-        }
-        else {
-          $filters[$name] = esc_sql($value);
-        }
-      }
-    }
-
-    if ($filters) {
-      // Check, if redirect has a hashtag.
-      $red_tokens = explode('#', $redirect);
-
-      if (count($red_tokens) > 1) {
-        $redirect = $red_tokens[0] . '?' . http_build_query($filters) . '#' . $red_tokens[1];
-      }
-      else {
-        $redirect .= '?' . http_build_query($filters);
-      }
-    };
-
-    wp_redirect($redirect);
-    exit();
-  }
-
-
-  // public function view(Post $model, $view = 'view')
-  // {
-  //   $vars['post'] = $model;
-
-  //   $template = $this->label() . '/' . $view . '.twig';
-
-  //   echo Tendril::render($template, $vars);
-  // }
 
   public function getPaginationLinks($wp_query = null)
   {

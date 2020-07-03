@@ -4,7 +4,7 @@ namespace Tendril;
 
 use \Timber\Menu;
 
-use Tendril\Controllers\Controller;
+use Tendril\PostTypes\PostType;
 
 use Tendril\Traits\Menu as MenuTrait;
 
@@ -12,7 +12,7 @@ class Site extends \Timber\Site
 {
     use MenuTrait;
 
-    protected $controllers = [];
+    protected $post_types = [];
 
     public function __construct() 
     {
@@ -102,18 +102,17 @@ class Site extends \Timber\Site
     }
 
     /**
-    * Add a new controller to the site
-    * @param Controller $controller
+    * Add a new post type to the site
+    * @param PostType $post_type
     */
-    public function registerController(Controller $controller)
+    public function registerPostType(PostType $post_type)
     {
-        add_action('init', function() use($controller) {
-            $controller->registerPostType();
-            $controller->registerTaxonomy();
-            $controller->addShortCodes();
+        add_action('init', function() use($post_type) {
+            $post_type->register();
+            $post_type->addShortCodes();
         });
 
-        array_push($this->controllers, $controller);
+        array_push($this->post_types, $post_type);
     }
 
     /**
@@ -269,7 +268,7 @@ class Site extends \Timber\Site
     public function addToTwig($twig) 
     {
         // $twig->addExtension( new \Twig\Extension\StringLoaderExtension() );
-        $twig->addFunction(new \Twig\TwigFunction('get_blocks', ['Tendril\Block', 'getBlocks']));
+        $twig->addFunction(new \Twig\TwigFunction('get_blocks', ['Tendril\Blocks\Block', 'getBlocks']));
         $twig->addFilter( new \Twig\TwigFilter( 'relative_links', [$this, 'relativeLinks'] ) );
         return $twig;
     }
