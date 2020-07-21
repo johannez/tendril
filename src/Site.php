@@ -268,8 +268,48 @@ class Site extends \Timber\Site
     public function addToTwig($twig) 
     {
         // $twig->addExtension( new \Twig\Extension\StringLoaderExtension() );
-        $twig->addFunction(new \Twig\TwigFunction('get_blocks', ['Tendril\Blocks\Block', 'getBlocks']));
+        $twig->addFunction(new \Twig\TwigFunction('get_blocks', [$this, 'getBlocks']));
         $twig->addFilter( new \Twig\TwigFilter( 'relative_links', [$this, 'relativeLinks'] ) );
         return $twig;
+    }
+
+    /**
+     * Get properly formatted Gutenberg blocks
+     *
+     * @param $conten Post content
+     */
+    public static function getBlocks($content)
+    {   
+        $blocks = [];
+        $blocks_raw = parse_blocks($content);
+
+        foreach ($blocks_raw as $block) {
+            if (!empty($block['blockName'])) {
+                $classes = [
+                    'block',
+                    'block--' . sanitize_title($block['blockName'])
+                ];
+                $content = render_block($block);
+
+                if (count($block['attrs'])) {
+                    foreach ($block['attrs'] as $key => $value) {
+                        if ($key == 'className') {
+                            $classes[] = $value;
+                        }
+                    }
+                }
+
+                $b = [
+                    'name' => $block['blockName'],
+                    'classes' => $classes,
+                    'attributes' => $block['attrs'],
+                    'content' => $content
+                ];
+
+                $blocks[] = $b;
+            }
+        }
+
+        return $blocks;
     }
 }
