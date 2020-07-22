@@ -18,19 +18,6 @@ class Config
             remove_menu_page( 'edit.php' );
         });
 
-
-        // Adjust ACF json path to use this plugin instead of theme.
-        add_filter('acf/settings/save_json', function($path) {
-            return plugin_dir_path( __FILE__ ) . '/acf-json';
-        });
-         
-        add_filter('acf/settings/load_json', function($path) {
-            return [plugin_dir_path( __FILE__ ) . '/acf-json'];
-        });
-
-        // add_action('acf/init', [$this, 'registerBlocks']);
-
-
         // Disable Custom Colors
         add_theme_support('disable-custom-colors');
 
@@ -94,17 +81,6 @@ class Config
     public function registerBlock(BlockType $block_type)
     {
         add_action('acf/init', [$block_type, 'register']);
-        // acf_register_block_type([
-        //     'name'              => 'two-columns',
-        //     'title'             => __('Two Columns'),
-        //     'description'       => __('Two columns layout.'),
-        //     'render_template'   => 'block.php',
-        //     'category'          => 'layout',
-        //     'icon'              => 'schedule',
-        //     'supports' => [
-        //         'align' => false
-        //     ]
-        // ]);
 
         array_push($this->block_types, $block_type);
     }
