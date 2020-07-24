@@ -78,7 +78,7 @@ abstract class Migration
         global $wpdb;
 
         $query_existing = "SELECT post_id
-            FROM {$this->mapping_table} mapping
+            FROM {$this->posts_mapping_table} mapping
             WHERE source_id = '{$source_id}'";
 
         return $wpdb->get_var($query_existing);
@@ -88,7 +88,7 @@ abstract class Migration
     {
         global $wpdb;
 
-        $wpdb->insert($this->mapping_table, [
+        $wpdb->insert($this->posts_mapping_table, [
             'source_id' => $source_id,
             'post_id' => $post_id,
             'post_type' => $post_type
