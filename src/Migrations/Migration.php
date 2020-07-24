@@ -9,7 +9,8 @@ require_once( ABSPATH . 'wp-admin/includes/image.php' );
 
 abstract class Migration
 {
-    protected $mapping_table = 'wp_migration_mapping';
+    protected $posts_mapping_table = 'wp_migration_posts_mapping';
+    protected $terms_mapping_table = 'wp_migration_terms_mapping';
 
     /**
     * Identify yourself.
@@ -83,7 +84,7 @@ abstract class Migration
         return $wpdb->get_var($query_existing);
     }
 
-    public function insertMapping($source_id, $post_id, $post_type)
+    public function insertPostMapping($source_id, $post_id, $post_type)
     {
         global $wpdb;
 
@@ -91,6 +92,28 @@ abstract class Migration
             'source_id' => $source_id,
             'post_id' => $post_id,
             'post_type' => $post_type
+        ]);
+    }
+
+    public function getExistingTerm($source_id)
+    {
+        global $wpdb;
+
+        $query_existing = "SELECT term_id
+            FROM {$this->terms_mapping_table} mapping
+            WHERE source_id = '{$source_id}'";
+
+        return $wpdb->get_var($query_existing);
+    }
+
+    public function insertTermMapping($source_id, $term_id, $taxonomy)
+    {
+        global $wpdb;
+
+        $wpdb->insert($this->terms_mapping_table, [
+            'source_id' => $source_id,
+            'term_id' => $term_id,
+            'taxonomy' => $taxonomy
         ]);
     }
 }
