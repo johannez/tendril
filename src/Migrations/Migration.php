@@ -9,21 +9,75 @@ require_once( ABSPATH . 'wp-admin/includes/image.php' );
 
 abstract class Migration
 {
-    protected $posts_mapping_table = 'wp_migration_posts_mapping';
-    protected $terms_mapping_table = 'wp_migration_terms_mapping';
+    /**
+     * Database table name to read and create mappings.
+     */
+    protected $mapping_table;
 
     /**
-    * Identify yourself.
-    */
-    abstract public function id();
+     * Name of base post type (e.g. post, term, user, comment, etc.)
+     */
+    protected $entity;
+
+
+    public function __construct($entity)
+    {
+        global $wpdb;
+        $this->entity = strtolower($entity);
+        $this->mapping_table = $wpdb->prefix . "migration_{$this->entity}_mapping";
+    }
 
     /**
     * Migrate the content into Wordpress.
     */
     abstract public function import();
 
-  
-    public function importImage($source_path, $pid)
+    /**
+     * Return the entity id of an existing mapping.
+     *
+     * @param source_id Source id from legacy system.
+     * 
+     * @return entity id (e.g. post id, term id, etc.)
+     */
+    public function getMapping($source_id)
+    {
+        global $wpdb;
+
+        return $wpdb->get_var("
+                SELECT entity_id
+                FROM {$this->mapping_table} mapping
+                WHERE source_id = '{$source_id}'
+            ");
+    }
+
+    /**
+     * Insert a mapping after a successful import.
+     *
+     * @param source_id Source id from legacy system.
+     * @param entity_id Entity id from Wordpress (e.g. post id).
+     * @param entity_type Entity type, if applicable (e.g. name of the custom post type, taxonomy name, etc).
+     */
+    public function insertMapping($source_id, $entity_id, $entity_type = '')
+    {
+        global $wpdb;
+
+        $wpdb->insert($this->mapping_table, [
+            'source_id' => $source_id,
+            'entity_id' => $entity_id,
+            'entity_type' => $entity_type ? strtolower($entity_type) : $this->entity
+        ]);
+    }
+
+    /**
+     * Import an image into Wordpress.
+     * This assume that all images are in an import folder. And then
+     * filename is then used to copy the file over to the wp_uploads folder
+     * to be added to the media libray. After that it's attached to an entity
+     *
+     * @param source_path The path to the original image file.
+     * @param entity_id Entity id from Wordpress (e.g. post id).
+     */
+    public function importImage($source_path, $entity_id)
     {
         global $wpdb;
 
@@ -71,49 +125,5 @@ abstract class Migration
             
             return $image_id;
         }
-    }
-
-    public function getExistingPost($source_id)
-    {
-        global $wpdb;
-
-        $query_existing = "SELECT post_id
-            FROM {$this->posts_mapping_table} mapping
-            WHERE source_id = '{$source_id}'";
-
-        return $wpdb->get_var($query_existing);
-    }
-
-    public function insertPostMapping($source_id, $post_id, $post_type)
-    {
-        global $wpdb;
-
-        $wpdb->insert($this->posts_mapping_table, [
-            'source_id' => $source_id,
-            'post_id' => $post_id,
-            'post_type' => $post_type
-        ]);
-    }
-
-    public function getExistingTerm($source_id)
-    {
-        global $wpdb;
-
-        $query_existing = "SELECT term_id
-            FROM {$this->terms_mapping_table} mapping
-            WHERE source_id = '{$source_id}'";
-
-        return $wpdb->get_var($query_existing);
-    }
-
-    public function insertTermMapping($source_id, $term_id, $taxonomy)
-    {
-        global $wpdb;
-
-        $wpdb->insert($this->terms_mapping_table, [
-            'source_id' => $source_id,
-            'term_id' => $term_id,
-            'taxonomy' => $taxonomy
-        ]);
     }
 }
