@@ -5,10 +5,13 @@
 
 namespace Tendril\Blocks;
 
-use \Timber\Timber;
+use Timber\Timber;
+use Tendril\Traits\TimberHelper;
 
 abstract class BlockType
 {
+    use TimberHelper;
+
     /**
     * Get the name.
     */
@@ -40,26 +43,30 @@ abstract class BlockType
 
     public function render($block, $content = '', $is_preview = false, $post_id = 0)
     {
-        $tendril_block = new Block($block);
-        $context = Timber::context();
-        $context['block'] = $tendril_block;
-        
-        $classes = [
-            'block',
-            'block--' . sanitize_title($block['name'])
-        ];
+        $template = 'block/' . str_replace('_', '-', $this->name()) . '.twig';
 
-        if (isset($block['className'])) {
-            $classes[] = $block['className'];
+        if ($this->templateExists($template)) {
+            $tendril_block = new Block($block);
+            $context = Timber::context();
+            $context['block'] = $tendril_block;
+            
+            $classes = [
+                'block',
+                'block--' . sanitize_title($block['name'])
+            ];
+
+            if (isset($block['className'])) {
+                $classes[] = $block['className'];
+            }
+
+            $context['block']->classes = $classes;
+
+            Timber::render($template, $context);
         }
-
-        $context['block']->classes = $classes;
-
-        Timber::render('block/' . str_replace('_', '-', $this->name()) . '.twig', $context);
+        else {
+            print "<p>Twig template $template doesn't exist</p>";
+        }
     }
 
-    public function enqueueAssets()
-    {
-        
-    }
+    public function enqueueAssets() {}
 }

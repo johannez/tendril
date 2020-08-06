@@ -4,10 +4,13 @@ namespace Tendril;
 
 use Tendril\PostTypes\PostType;
 use Tendril\Blocks\BlockType;
+use Tendril\Traits\TimberHelper;
+
+use Timber\Timber;
 
 class Config
 {
-
+    use TimberHelper;
     protected $post_types = [];
     protected $block_types = [];
 
@@ -52,8 +55,27 @@ class Config
                 return $block_content;
             }
             else if (stristr($block['blockName'], 'core') && $block['innerHTML']) {
-                return '<div class="block block--' . sanitize_title($block['blockName']) . '">'
-                         . $block_content . '</div>';
+                $output = $block_content;
+
+                if ($this->templateExists('block/core.twig')) {
+                    $context = Timber::context();
+
+                    $classes = [
+                        'block',
+                        'block--' . sanitize_title($block['blockName'])
+                    ];
+
+                    $context['block'] = [
+                        'name' => $block['blockName'],
+                        'classes' => $classes,
+                        'attributes' => $block['attrs'],
+                        'content' => $block['innerHTML']
+                    ];
+
+                    $output = Timber::compile('block/core.twig', $context);
+                }
+
+                return $output;
             }
         }, 10, 2 );
 
