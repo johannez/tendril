@@ -44,8 +44,18 @@ abstract class BlockType
         $context = Timber::context();
         $context['block'] = $tendril_block;
         
+        $classes = [
+            'block',
+            'block--' . sanitize_title($block['name'])
+        ];
 
-        Timber::render('block/' . $this->name() . '.twig', $context);
+        if (isset($block['className'])) {
+            $classes[] = $block['className'];
+        }
+
+        $context['block']->classes = $classes;
+
+        Timber::render('block/' . str_replace('_', '-', $this->name()) . '.twig', $context);
     }
 
     public function enqueueAssets()

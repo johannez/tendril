@@ -45,6 +45,18 @@ class Config
         // Disable Wordpress threshold for large images.
         add_filter( 'big_image_size_threshold', '__return_false' );
 
+        // Wrap core blocks into something useful and remove empyt blocks.
+        add_filter('render_block', function($block_content, $block) {
+            
+            if (stristr($block['blockName'], 'acf')) {
+                return $block_content;
+            }
+            else if (stristr($block['blockName'], 'core') && $block['innerHTML']) {
+                return '<div class="block block--' . sanitize_title($block['blockName']) . '">'
+                         . $block_content . '</div>';
+            }
+        }, 10, 2 );
+
         // Allow SVG file uploads.
         add_filter('upload_mimes', function($upload_mimes) {
             $upload_mimes['svg'] = 'image/svg+xml'; 
