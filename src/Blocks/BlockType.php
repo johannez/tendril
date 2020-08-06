@@ -5,7 +5,7 @@
 
 namespace Tendril\Blocks;
 
-use \Timber;
+use \Timber\Timber;
 
 abstract class BlockType
 {
@@ -40,7 +40,12 @@ abstract class BlockType
 
     public function render($block, $content = '', $is_preview = false, $post_id = 0)
     {
-        print 'You have to override the render function for the ' . $this->title() . ' block.';
+        $tendril_block = new Block($block);
+        $context = Timber::context();
+        $context['block'] = $tendril_block;
+        
+
+        Timber::render('block/two-column.twig', $context);
     }
 
     public function enqueueAssets()
