@@ -45,7 +45,7 @@ abstract class BlockType
         $context['block'] = $tendril_block;
         
 
-        Timber::render('block/two-column.twig', $context);
+        Timber::render('block/' . $this->name(), $context);
     }
 
     public function enqueueAssets()
