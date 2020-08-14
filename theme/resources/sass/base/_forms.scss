@@ -1,0 +1,21 @@
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  appearance: none;
+  display: block;
+  border-radius: 0;
+  width: 100%;
+  padding: 1rem;
+  font-size: 0.875rem;
+  max-width: 32rem;
+
+  &::placeholder {
+    opacity: 1;
+  }
+
+  @screen md {
+    font-size: 1.125rem;
+  }
+}
+

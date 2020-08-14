@@ -1,0 +1,40 @@
+%list-default {
+  ul,
+  ol {
+    margin: 0 0 0 1.5rem;
+
+    ul,
+    ol {
+      margin: 0.5rem 0;
+
+      li {
+        padding-left: 1rem;
+      }
+    }
+  }
+
+  ul {
+    list-style: disc inside;
+  }
+
+  ol {
+    list-style: decimal inside;
+  }
+}
+
+%promotion-triangle {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 18px 20px 18px 0;
+  border-color: transparent theme('colors.red-500') transparent transparent;
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  @screen lg {
+    border-width: 37px 40px 37px 0;
+    left: -40px;
+  }
+}

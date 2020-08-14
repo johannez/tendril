@@ -1,0 +1,27 @@
+// Wordpress specific classes
+.align-center {
+  text-align: center;
+}
+
+.has-medium-font-size {
+  // @apply text-xl leading-tight;
+
+  // @screen md {
+  //   @apply text-24;
+  // }
+
+  // @screen lg {
+  //   @apply text-28
+  // }
+}
+
+.wordpress-preview {
+  display: none;
+}
+
+// Admin bar visible
+body.admin-bar {
+  #header > div {
+    top: 32px;
+  }
+}

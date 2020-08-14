@@ -1,0 +1,11 @@
+<div class="search-form-container">
+  <form name="search" role="search" method="get" id="searchform" class="searchform" action="/">
+
+    <div class="form-item search-field flex">
+      <input id="search-form-input" type="text" ref="search" class="bg-transparent border-b-2 border-black" value="" name="s" placeholder="" aria-label="{{ __('Search') }}" required tabindex="-1">
+      <button type="submit" class="bg-transparent text-black p-4 border-solid border-b-2 border-black" id="search-submit" aria-label="{{ __('Submit') }}">
+        {% include 'icons/search.svg' %}
+      </button>
+    </div>
+  </form>
+</div>

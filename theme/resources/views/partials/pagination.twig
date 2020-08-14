@@ -1,0 +1,39 @@
+{% if posts.pagination.pages is not empty %}
+    {% set link_classes = 'block px-4 text-black hover:text-red-500' %}
+    <nav class="pagination-block">
+        <ul class="pagination flex justify-center flex-wrap items-center mt-8 md:mt-16">
+
+            {# Previous #}
+            {% if posts.pagination.prev %}
+                <li class="prev">
+                    <a href="{{ posts.pagination.prev.link }}" class="{{ link_classes }}">Previous</a>
+                </li>
+            {% endif %}
+
+            {# Pages #}
+            {% for page in posts.pagination.pages %}
+                {% if page.link %}
+                    <li>
+                        <a href="{{ page.link }}" class="{{ page.class }} {{ link_classes }}">{{ page.title }}</a>
+                    </li>
+                {% elseif page.current %}
+                    <li class="current">
+                        <span class="{{ page.class }} text-red-500 block px-4">{{ page.title }}</span>
+                    </li>
+                {% else %}
+                    <li class="spacer">
+                        <span class="{{ page.class }} block px-4">{{ page.title }}</span>
+                    </li>    
+                {% endif %}
+            {% endfor %}
+
+            {# Next #}
+            {% if posts.pagination.next %}
+                <li class="next">
+                    <a href="{{ posts.pagination.next.link }}" class="{{ link_classes }}">Next</a>
+                </li>
+            {% endif %}
+
+        </ul>
+    </nav>
+{% endif %}

@@ -1,0 +1,30 @@
+button,
+.btn {
+  appearance: none;
+  border: 0;
+  border-radius: 0;
+  cursor: pointer;
+  display: inline-block;
+  text-transform: uppercase;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0.75rem 1.5rem;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+
+  @screen md {
+    padding: 0.75rem 1.5rem;
+  }
+
+  @screen lg {
+    padding: 1.25rem 3rem;
+  }
+
+  &:hover {
+    
+  }
+}

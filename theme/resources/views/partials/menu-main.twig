@@ -1,0 +1,31 @@
+{% if items %}
+  <ul class="flex">
+  {% for item in items %}
+    {% set active = item.current or item.current_item_ancestor or (item.object_id in active_menu_items) %}
+
+    <li class="mx-2 group uppercase relative text-lg xl:text-xl tracking-wider {{ item.classes | join(' ') }}">
+      <a href="{{ item.link }}" class="group block relative py-1 mx-4 text-black hover:text-black" target="{{ item.target }}">
+        <div class="{{ not active ? 'invisible' }} group-hover:visible h-2 bg-orange-400 absolute left-0 bottom-0 w-full mb-tiny"></div>
+        <div class="relative z-10">{{ item.title }}</div>
+      </a>
+      
+
+      {% if item.children %}
+        <div class="invisible absolute left-1/2 transform -translate-x-1/2 group-hover:visible w-64 pt-12 z-30">
+          <div class="relative z-10">
+            <div class="triangle-up triangle-up--shadow"></div>
+            <div class="triangle-up"></div>
+          </div>
+          <ul class="bg-white shadow-thick">
+          {% for ci in item.children %}
+            <li class="{{ ci.classes | join(' ') }}">
+              <a target="{{ ci.target }}" href="{{ ci.link }}" class="block normal-case font-normal text-base px-6 py-3 text-black hover:text-black hover:bg-gray-400">{{ ci.title }}</a>
+            </li>
+          {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </li>
+  {% endfor %}
+  </ul>
+{% endif %}

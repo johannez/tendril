@@ -1,0 +1,15 @@
+{% if breadcrumbs %}
+  <div class="breadcrumbs text-sm px-20 mt-4">
+    <ul class="flex">
+      {% for br in breadcrumbs %}
+        <li>
+          <a href="{{ br.url }}">{{ br.title }}</a>
+        </li>
+        {% if not loop.last %}
+          <li class="mx-2">></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+

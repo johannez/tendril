@@ -1,0 +1,23 @@
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  a {
+    padding: 1rem;
+    display: block;
+    color: #000;
+  }
+
+  a:hover,
+  li.active a {
+    
+  }
+
+  .pager__break {
+    a,
+    a:hover {
+      
+    }
+  }
+}

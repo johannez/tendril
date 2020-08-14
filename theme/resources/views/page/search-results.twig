@@ -1,0 +1,37 @@
+{% extends "base.twig" %}
+
+{% block content %}
+
+  <article class="post-type-page" id="page-search-results">
+    {% include 'partials/page-header.twig' with 
+      {
+        'title': __('Search Results for') ~ ' "' ~ search_query ~ '"',
+        'classes': 'mb-8 md:mb-12 lg:mb-20'
+      }
+    %}
+    
+
+    <section class="page__content max-w-content mx-auto px-4">
+      <div class="page__content-wrapper">
+        {% if search_results %}
+          <ul>
+            {% for sr in search_results %}
+              <li class="search-result search-result--{{ sr.type|lower }} mb-4 md:mb-8">
+                <div class="search-result__type text-lg md:text-xl uppercase">{{ sr.type }}</div>
+                <div class="search-result__title text-xl md:text-22 md:text-26 font-cabin">
+                  <a href="{{ sr.link }}" class="title-link">{{ sr.title }}</a>
+                </div>
+                <div class="search-result__summary">{{ sr.summary|striptags('<a>')|truncate(50, true) }}</div>
+              </li>
+            {% endfor %}
+          </ul>
+
+          {% include "partials/pagination.twig" %}
+        {% else %}
+          <h2>There are no results for "{{ search_query }}".</h2>
+        {% endif %}
+      </div>
+    </section>
+  </article>
+
+{% endblock %}

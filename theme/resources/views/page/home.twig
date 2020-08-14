@@ -1,0 +1,20 @@
+{% extends "base.twig" %}
+
+{% block content %}
+  
+  <article class="post-type-page" id="page-{{ post.ID }}">  
+    <header class="max-w-site mx-auto">
+      <h1 class="sr-only">{{ post.title }}</h1>
+      {% include 'partials/home-header.twig' %}
+    </header>
+
+    <section class="relative overflow-hidden">
+      <div class="max-w-container mx-auto px-4 ">
+        {% include 'partials/blocks.twig' with {'blocks': get_blocks(post.post_content)} %}
+      </div>
+    </section>
+
+    
+  </article>
+  
+{% endblock %}

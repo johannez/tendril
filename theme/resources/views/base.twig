@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html class="no-js no-svg" {{ site.language_attributes }}>
+  <head>
+    <meta charset="{{ site.charset }}" />
+    <meta name="description" content="{{ site.description }}">
+    <link rel="stylesheet" href="{{ site.theme.link }}/style.css" type="text/css" media="screen" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
+    <link rel="pingback" href="{{ site.pingback_url }}" />
+    <link rel="profile" href="http://gmpg.org/xfn/11">
+
+    {% include 'partials/favicon.twig' %}
+
+    <link href="https://fonts.googleapis.com/css2?family=Cabin:wght@400;500;700&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet"> 
+
+    {{ function('wp_head') }}
+
+
+    <link rel="stylesheet" href="{{ site.theme.uri }}/public/css/ie.css" type="text/css">
+
+    <!-- Google Tag Manager -->
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-KH6B89D');
+    </script>
+    <!-- End Google Tag Manager -->
+      
+    
+  </head>
+
+  <body class="{{ body_class }} text-base md:text-lg font-body pt-16 lg:pt-32" data-template="base.twig">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KH6B89D" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+
+    <a class="skip-link screen-reader-text sr-only" href="#content">{{ __( 'Skip to content') }}</a>
+    <div id="app">
+      {% include 'partials/header.twig' %}
+
+      <section id="content" role="main" class="content min-h-half">
+        <div class="max-w-container mx-auto px-4">
+          {% if sub_menu %}
+            <nav id="nav-sub" class="nav-sub-menu my-4 hidden lg:block" role="navigation">
+              {% include "partials/menu-sub.twig" with {'items': sub_menu} %}
+            </nav>
+          {% endif %}
+
+          {% if options.site_alert %}
+            <div class="site-alert max-w-content mx-auto my-4 px-4 text-xl lg:text-24 font-bold text-center">{{ options.site_alert }}</div>
+          {% endif %}
+        </div>
+
+        {% block content %}
+          Sorry, no content
+        {% endblock %}
+      </section>
+
+      {% include 'partials/footer.twig' %}
+    </div>
+
+    {{ function('wp_footer') }}
+
+    <!-- Go to www.addthis.com/dashboard to customize your tools --> 
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5e61469a3a2325da" async="async"></script>
+  </body>
+</html>

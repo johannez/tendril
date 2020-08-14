@@ -1,0 +1,37 @@
+/*
+  Extra style for the Wordpress backend.
+*/
+
+/* purgecss start ignore */
+
+.wp-block {
+  max-width: 960px;
+}
+
+.acf-block-preview {
+  background: #EDEDED;
+
+  img {
+    max-height: 250px;
+    max-width: 400px;
+    display: block;
+  }
+
+  .full-image-container {
+    img {
+      width: 100%;
+      max-width: none;
+    }
+  }
+
+  svg {
+    display: none;
+  }
+
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+/* purgecss end ignore */

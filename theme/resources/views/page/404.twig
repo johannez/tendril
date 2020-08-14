@@ -1,0 +1,22 @@
+{% extends "base.twig" %}
+
+{% block content %}
+  
+  <article class="post-type-page" id="page-404">  
+    {% include 'partials/page-header.twig' with 
+      {
+        'title': __('Page Not Found'),
+        'classes': ''
+      }
+    %}
+
+    <section class="relative overflow-hidden px-4">
+      <div class="max-w-content mx-auto pt-16">
+        <div class="article__body has-medium-font-size">{{ options.page_not_found }}</div>
+      </div>
+    </section>
+
+    
+  </article>
+  
+{% endblock %}
