@@ -20,7 +20,7 @@ Trait TimberHelper
         // Add current theme directories first.
         if (is_array(Timber::$dirname)) {
             foreach (Timber::$dirname as $dir_name) {
-                $directories[] = get_template_directory() . '/' . $dirname;
+                $directories[] = get_template_directory() . '/' . $dir_name;
             }
         }
         else {
