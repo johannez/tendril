@@ -10,7 +10,7 @@ class Site extends TimberSite
 
     public function __construct() 
     {
-        parent::construct();
+        parent::__construct();
 
         add_action('after_setup_theme', [$this, 'themeSupports']);
 
