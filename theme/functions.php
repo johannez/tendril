@@ -1,5 +1,6 @@
 <?php
 
+use Tendril\Site;
 
 
 // Load and configure Timber.
@@ -16,7 +17,4 @@ Timber::$dirname = ['resources/views'];
 Timber::$autoescape = false;
 
 // Configure and initialize the site.
-$hertz = new Hertz\Site();
-$hertz->init();
-
-
+$site = new Site();

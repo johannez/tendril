@@ -23,17 +23,6 @@ foreach ($search_results as $sr) {
     ];
 
     switch ($sr->type) {
-      case 'news':
-      case 'event':
-      case 'story':
-        $search_result['summary'] = $sr->summary;
-        break;
-
-      case 'person':
-        $search_result['title'] = ($sr->salutation ? $sr->salutation : $sr->first_name) . ' ' . $sr->last_name;
-        $search_result['summary'] = $sr->biography;
-        break;  
-
       default:
         $search_result['summary'] = $sr->post_content;
         break;

@@ -2,8 +2,8 @@
   <div class="fixed w-full h-16 lg:h-32 top-0 left-0 z-50 bg-white shadow">
     <div class="max-w-container mx-auto px-4">
       <div class="flex items-center h-16 lg:h-32">
-        <div class="hdr-logo h-12 lg:h-20" role="banner">
-          <a class="hdr-logo-link" href="/" rel="home">
+        <div class="site-logo h-12 lg:h-20" role="banner">
+          <a href="/" rel="home">
             <img src="{{ site.theme.link }}/public/logo.svg" alt="Site Logo" class="h-12 lg:h-20 w-auto" ></a>
           </a>
         </div>
@@ -12,22 +12,9 @@
           <nav id="nav-main" class="nav-main ml-auto hidden lg:block" role="navigation">
             {% include "partials/menu-main.twig" with {'items': menu.main} %}
           </nav>
-          
-          <div class="hidden lg:block">
-            <search>{% include 'forms/search.twig' %}</search>
-          </div>
-
-          <div class="pr-3 lg:hidden">
-            <menu-mobile :menu-items='{{ menu.mobile|raw }}'></menu-mobile>
-          </div>
-
-          <nav id="nav-meta" class="nav-meta ml-auto h-full" role="navigation">
-            {% include "partials/menu-meta.twig" with {'items': menu.meta} %}
-          </nav>
         </div>
       </div>
-
-
+      
     </div>
   </div>
 </header>

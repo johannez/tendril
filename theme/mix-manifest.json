@@ -1,10 +1,8 @@
 {
-    "/public/js/app.es6.js": "/public/js/app.es6.js",
-    "/public/css/backend.css": "/public/css/backend.css",
-    "/public/css/ie.css": "/public/css/ie.css",
-    "/public/css/app.css": "/public/css/app.css",
-    "/public/js/app.es6.js.map": "/public/js/app.es6.js.map",
     "/public/js/app.js": "/public/js/app.js",
+    "/public/css/backend.css": "/public/css/backend.css",
+    "/public/css/app.css": "/public/css/app.css",
+    "/public/js/app.es5.js": "/public/js/app.es5.js",
     "/public/js/vendor.js": "/public/js/vendor.js",
     "/public/css/vendor.css": "/public/css/vendor.css"
 }
