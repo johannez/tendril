@@ -2,25 +2,16 @@
 
 namespace Tendril;
 
-use \Timber\Menu;
+use Timber\Menu;
+use Timber\Site as TimberSite;
 
-use Tendril\PostTypes\PostType;
-
-use Tendril\Traits\Menu as MenuTrait;
-
-class Site extends \Timber\Site
+class Site extends TimberSite
 {
-    use MenuTrait;
-
-    protected $post_types = [];
 
     public function __construct() 
     {
-        parent::__construct();
-    }
+        parent::construct();
 
-    public function init()
-    {
         add_action('after_setup_theme', [$this, 'themeSupports']);
 
         add_action('init', function() {
@@ -29,25 +20,13 @@ class Site extends \Timber\Site
           }
         });
 
-        add_action('acf/init', [$this, 'registerBlocks']);
-
         // Remove link to default post type from menu.
         add_action('admin_menu', function() {
             remove_menu_page( 'edit.php' );
         });
 
 
-        add_action('wp_enqueue_scripts', function() {
-
-            wp_enqueue_style('vendor_css', get_template_directory_uri() .  '/public/css/vendor.css');
-            wp_enqueue_style('app_css', get_template_directory_uri() .  '/public/css/app.css');
-
-            // Load main script with PHP variables.
-            wp_register_script('vendor_js', get_template_directory_uri() .  '/public/js/vendor.js' );
-            wp_register_script('app_js', get_template_directory_uri() .  '/public/js/app.js' );
-            wp_localize_script('app_js', 'Wordpress', $this->getJsVars());
-            wp_enqueue_script('app_js', '', [], false, true);
-        });
+        add_action('wp_enqueue_scripts', [$this, 'enqueueScripts']);
 
         add_filter('timber/context', [$this, 'addToContext']);
         add_filter('timber/twig', [$this, 'addToTwig']);
@@ -67,8 +46,22 @@ class Site extends \Timber\Site
     }
 
     /**
+    * Enqueue scripts and stylesheets.
+    */
+    public function enqueueScripts()
+    {
+        wp_enqueue_style('vendor_css', get_template_directory_uri() .  '/public/css/vendor.css');
+        wp_enqueue_style('app_css', get_template_directory_uri() .  '/public/css/app.css');
+
+        // Load main script with PHP variables.
+        wp_register_script('vendor_js', get_template_directory_uri() .  '/public/js/vendor.js' );
+        wp_register_script('app_js', get_template_directory_uri() .  '/public/js/app.js' );
+        wp_localize_script('app_js', 'Wordpress', $this->getJsVars());
+        wp_enqueue_script('app_js', '', [], false, true);
+    }
+
+    /**
     * Sent Javascript variables to the front end.
-    * @param Controller $controller
     */
     public function getJsVars()
     {
@@ -99,57 +92,6 @@ class Site extends \Timber\Site
         // $text = str_replace($targets, '', $text);
 
         return $text;
-    }
-
-    /**
-    * Add a new post type to the site
-    * @param PostType $post_type
-    */
-    public function registerPostType(PostType $post_type)
-    {
-        add_action('init', function() use($post_type) {
-            $post_type->register();
-            $post_type->addShortCodes();
-        });
-
-        array_push($this->post_types, $post_type);
-    }
-
-    /**
-     * Register custom Gutenberg blocks.
-     */
-    public function registerBlocks()
-    {
-        // acf_register_block_type([
-        //     'name'              => 'two-columns',
-        //     'title'             => __('Two Columns'),
-        //     'description'       => __('Two columns layout.'),
-        //     'render_template'   => 'block.php',
-        //     'category'          => 'layout',
-        //     'icon'              => 'schedule',
-        //     'supports' => [
-        //         'align' => false
-        //     ]
-        // ]);
-    }
-
-    /**
-     * Get a specific controller object by its label
-     *
-     * @param label - Short name of the controller
-     */
-    public function getController($label)
-    {
-        $controller = null;
-
-        foreach($this->controllers as $con) {
-            if ($con->label() == $lable) {
-                $controller = $con;
-                break;
-            }
-        }
-
-        return $controller;
     }
 
     /** This is where you add some context
