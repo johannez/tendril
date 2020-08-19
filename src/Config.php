@@ -21,23 +21,6 @@ class Config
             remove_menu_page( 'edit.php' );
         });
 
-        // Disable Custom Colors
-        add_theme_support('disable-custom-colors');
-
-        // Load brand colors.
-        if ($colors = $this->getColors()) {
-            $colors_formatted = [];
-            foreach ($colors as $name => $code) {
-                $colors_formatted[] = [
-                    'name' => $name,
-                    'slug' => sanitize_title($name),
-                    'color' => $code
-                ];
-            }
-
-            add_theme_support('editor-color-palette', $colors_formatted);
-        }
-
         // Initiliazed ACF options page.
         add_action('init', function() {
             if (class_exists('ACF')) {
@@ -48,51 +31,12 @@ class Config
         // Disable Wordpress threshold for large images.
         add_filter( 'big_image_size_threshold', '__return_false' );
 
-        // Wrap core blocks into something useful and remove empyt blocks.
-        add_filter('render_block', function($block_content, $block) {
-            
-            if (stristr($block['blockName'], 'acf')) {
-                return $block_content;
-            }
-            else if (stristr($block['blockName'], 'core') && $block['innerHTML']) {
-                $output = $block_content;
-
-                if ($this->templateExists('block/core.twig')) {
-                    $context = Timber::context();
-
-                    $classes = [
-                        'block',
-                        'block--' . sanitize_title($block['blockName'])
-                    ];
-
-                    $context['block'] = [
-                        'name' => $block['blockName'],
-                        'classes' => $classes,
-                        'attributes' => $block['attrs'],
-                        'content' => $block['innerHTML']
-                    ];
-
-                    $output = Timber::compile('block/core.twig', $context);
-                }
-
-                return $output;
-            }
-        }, 10, 2 );
-
         // Allow SVG file uploads.
         add_filter('upload_mimes', function($upload_mimes) {
             $upload_mimes['svg'] = 'image/svg+xml'; 
             $upload_mimes['svgz'] = 'image/svg+xml'; 
             return $upload_mimes; 
         }, 10, 1 );
-    }
-
-    /**
-     * Get brand colors for the Wordpress backend.
-     */
-    public function getColors()
-    {
-      return [];
     }
 
     /**
@@ -117,29 +61,5 @@ class Config
         add_action('acf/init', [$block_type, 'register']);
 
         array_push($this->block_types, $block_type);
-    }
-
-
-    /**
-     * Set allowed Gutenberg blocks
-     */
-    public function allowedBlocks()
-    {
-        // $registered_blocks = \WP_Block_Type_Registry::get_instance()->get_all_registered();
-        // ddd($registered_blocks);
-
-        return [
-            'core/paragraph',
-            'core/table',
-            'core/image',
-            'core/shortcode',
-            'core/heading',
-            'core/quote',
-            'core/list',
-            'core/separator',
-            'core/button',
-            'core/html',
-            // 'acf/two-columns'
-        ];
     }
 }

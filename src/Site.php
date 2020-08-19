@@ -13,34 +13,11 @@ class Site extends TimberSite
         parent::__construct();
 
         add_action('after_setup_theme', [$this, 'themeSupports']);
-
-        add_action('init', function() {
-          if (class_exists('ACF')) {
-            \acf_add_options_page();
-          }
-        });
-
-        // Remove link to default post type from menu.
-        add_action('admin_menu', function() {
-            remove_menu_page( 'edit.php' );
-        });
-
-
         add_action('wp_enqueue_scripts', [$this, 'enqueueScripts']);
 
         add_filter('timber/context', [$this, 'addToContext']);
         add_filter('timber/twig', [$this, 'addToTwig']);
-        add_filter('allowed_block_types', [$this, 'allowedBlocks']);
-        
-        // Disable Wordpress threshold for large images.
-        add_filter( 'big_image_size_threshold', '__return_false' );
-
-        // Allow SVG file uploads.
-        add_filter('upload_mimes', function($upload_mimes) {
-            $upload_mimes['svg'] = 'image/svg+xml'; 
-            $upload_mimes['svgz'] = 'image/svg+xml'; 
-            return $upload_mimes; 
-        }, 10, 1 );
+        add_filter('render_block', [$this, 'renderBlock'], 10, 2);
 
         $this->addImageSizes();
     }
@@ -74,6 +51,36 @@ class Site extends TimberSite
     public function getColors()
     {
       return [];
+    }
+
+    public function renderBlock($block_content, $block)
+    {
+        if (stristr($block['blockName'], 'acf')) {
+            return $block_content;
+        }
+        else if (stristr($block['blockName'], 'core') && $block['innerHTML']) {
+            $output = $block_content;
+            
+            if ($this->templateExists('block/core.twig')) {
+                $context = Timber::context();
+
+                $classes = [
+                    'block',
+                    'block--' . sanitize_title($block['blockName'])
+                ];
+
+                $context['block'] = [
+                    'name' => $block['blockName'],
+                    'classes' => $classes,
+                    'attributes' => $block['attrs'],
+                    'content' => $block['innerHTML']
+                ];
+
+                $output = Timber::compile('block/core.twig', $context);
+            }
+
+            return $output;
+        }
     }
 
     /**
@@ -183,25 +190,25 @@ class Site extends TimberSite
     /**
      * Set allowed Gutenberg blocks
      */
-    public function allowedBlocks()
-    {
-        // $registered_blocks = \WP_Block_Type_Registry::get_instance()->get_all_registered();
-        // ddd($registered_blocks);
+    // public function allowedBlocks()
+    // {
+    //     // $registered_blocks = \WP_Block_Type_Registry::get_instance()->get_all_registered();
+    //     // ddd($registered_blocks);
 
-        return [
-            'core/paragraph',
-            'core/table',
-            'core/image',
-            'core/shortcode',
-            'core/heading',
-            'core/quote',
-            'core/list',
-            'core/separator',
-            'core/button',
-            'core/html',
-            // 'acf/two-columns'
-        ];
-    }
+    //     return [
+    //         'core/paragraph',
+    //         'core/table',
+    //         'core/image',
+    //         'core/shortcode',
+    //         'core/heading',
+    //         'core/quote',
+    //         'core/list',
+    //         'core/separator',
+    //         'core/button',
+    //         'core/html',
+    //         // 'acf/two-columns'
+    //     ];
+    // }
 
     /** 
      * This is where you can add your own functions to twig.
