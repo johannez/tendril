@@ -7,19 +7,17 @@ use Timber\Site as TimberSite;
 
 class Site extends TimberSite
 {
-
     public function __construct() 
     {
         parent::__construct();
 
         add_action('after_setup_theme', [$this, 'themeSupports']);
+        add_action('after_setup_theme', [$this, 'addImageSizes']);
         add_action('wp_enqueue_scripts', [$this, 'enqueueScripts']);
 
         add_filter('timber/context', [$this, 'addToContext']);
         add_filter('timber/twig', [$this, 'addToTwig']);
         add_filter('render_block', [$this, 'renderBlock'], 10, 2);
-
-        $this->addImageSizes();
     }
 
     /**
@@ -36,6 +34,11 @@ class Site extends TimberSite
         wp_localize_script('app_js', 'Wordpress', $this->getJsVars());
         wp_enqueue_script('app_js', '', [], false, true);
     }
+
+    /**
+    * Add custom image sizes.
+    */
+    public function addImageSizes() {}
 
     /**
     * Sent Javascript variables to the front end.
@@ -81,24 +84,6 @@ class Site extends TimberSite
 
             return $output;
         }
-    }
-
-    /**
-     * Make all links in the text relative to the site,
-     * if they match the pattern.
-     */
-    public function relativeLinks($text) 
-    {
-        // $targets = [
-        //   'https://live-NAME.pantheonsite.io',
-        //   'https://test-NAME.pantheonsite.io',
-        //   'https://dev-NAME.pantheonsite.io',
-        //   'https://NAME.lndo.site',
-        // ];
-
-        // $text = str_replace($targets, '', $text);
-
-        return $text;
     }
 
     /** This is where you add some context
@@ -187,29 +172,6 @@ class Site extends TimberSite
         add_theme_support( 'menus' );
     }
 
-    /**
-     * Set allowed Gutenberg blocks
-     */
-    // public function allowedBlocks()
-    // {
-    //     // $registered_blocks = \WP_Block_Type_Registry::get_instance()->get_all_registered();
-    //     // ddd($registered_blocks);
-
-    //     return [
-    //         'core/paragraph',
-    //         'core/table',
-    //         'core/image',
-    //         'core/shortcode',
-    //         'core/heading',
-    //         'core/quote',
-    //         'core/list',
-    //         'core/separator',
-    //         'core/button',
-    //         'core/html',
-    //         // 'acf/two-columns'
-    //     ];
-    // }
-
     /** 
      * This is where you can add your own functions to twig.
      * @param string $twig get extension.
@@ -227,38 +189,33 @@ class Site extends TimberSite
      *
      * @param $conten Post content
      */
-    public static function getBlocks($content)
+    public function getBlocks($content)
     {   
-        $blocks = [];
-        $blocks_raw = parse_blocks($content);
+        $output = '';
+        $blocks = parse_blocks($content);
 
-        foreach ($blocks_raw as $block) {
-            if (!empty($block['blockName'])) {
-                $classes = [
-                    'block',
-                    'block--' . sanitize_title($block['blockName'])
-                ];
-                $content = render_block($block);
-
-                if (count($block['attrs'])) {
-                    foreach ($block['attrs'] as $key => $value) {
-                        if ($key == 'className') {
-                            $classes[] = $value;
-                        }
-                    }
-                }
-
-                $b = [
-                    'name' => $block['blockName'],
-                    'classes' => $classes,
-                    'attributes' => $block['attrs'],
-                    'content' => $content
-                ];
-
-                $blocks[] = $b;
-            }
+        foreach ($blocks as $b) {
+            $output .= render_block($b);
         }
 
-        return $blocks;
+        return $output;
+    }
+
+    /**
+     * Make all links in the text relative to the site,
+     * if they match the pattern.
+     */
+    public function relativeLinks($text) 
+    {
+        // $targets = [
+        //   'https://live-NAME.pantheonsite.io',
+        //   'https://test-NAME.pantheonsite.io',
+        //   'https://dev-NAME.pantheonsite.io',
+        //   'https://NAME.lndo.site',
+        // ];
+
+        // $text = str_replace($targets, '', $text);
+
+        return $text;
     }
 }

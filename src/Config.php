@@ -4,13 +4,9 @@ namespace Tendril;
 
 use Tendril\PostTypes\PostType;
 use Tendril\Blocks\BlockType;
-use Tendril\Traits\TimberHelper;
-
-use Timber\Timber;
 
 class Config
 {
-    use TimberHelper;
     protected $post_types = [];
     protected $block_types = [];
 
@@ -47,7 +43,6 @@ class Config
     {
         add_action('init', function() use ($post_type) {
             $post_type->register();
-            // $post_type->addShortCodes();
         });
 
         array_push($this->post_types, $post_type);
