@@ -77,13 +77,13 @@ abstract class Migration
      * @param source_path The path to the original image file.
      * @param entity_id Entity id from Wordpress (e.g. post id).
      */
-    public function importImage($source_path, $entity_id)
+    public function importImage($source_path, $pid = 0, $alt = '')
     {
         global $wpdb;
 
         if (trim($source_path)) {
             $upload_directory = wp_upload_dir();
-            $filename = basename($source_path);
+            $filename = esc_sql(basename($source_path));
             $dest_url = $upload_directory['url'] . '/' . $filename;
 
             // Check, if image already exists in the system.            
@@ -106,7 +106,7 @@ abstract class Migration
                     $image = [
                         'guid' => $upload_directory['url'] . '/' . $filename,
                         'post_mime_type' => $file_type['type'],
-                        'post_title'     => $filename,
+                        'post_title'     => $alt ? $alt : $filename,
                         'post_content'   => '',
                         'post_status'    => 'inherit'
                     ];
@@ -115,7 +115,7 @@ abstract class Migration
 
                     $image_data = wp_generate_attachment_metadata( $image_id, $dest_path );
                     wp_update_attachment_metadata( $image_id, $image_data );
-                    update_post_meta($image_id, '_wp_attachment_image_alt', $filename);
+                    update_post_meta($image_id, '_wp_attachment_image_alt', $alt ? $alt : $filename);
                 }
                 else {
                     error_log("Migration::importImage(): Source file $source_path doesn't exist");

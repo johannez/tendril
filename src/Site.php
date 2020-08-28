@@ -61,11 +61,15 @@ class Site extends TimberSite
         if (stristr($block['blockName'], 'acf')) {
             return $block_content;
         }
-        else if (stristr($block['blockName'], 'core') && $block['innerHTML']) {
+        else if ($block['innerHTML']) {
             $output = $block_content;
             
             if ($this->templateExists('block/core.twig')) {
                 $context = Timber::context();
+
+                if (!$block['blockName']) {
+                    $block['blockName'] = 'core/Classic';
+                }
 
                 $classes = [
                     'block',
