@@ -2,15 +2,13 @@
 
 {% block content %}
   
-  <article class="post-type-page" id="page-{{ post.ID }}">  
+  <article id="page-{{ post.ID }}" class="post-type-page max-w-screen-xl mx-auto px-4 py-8">  
     <header>
       <h1>{{ post.title }}</h1>
     </header>
 
     <section id="content">
-      <div class="max-w-container mx-auto px-4">
-        {{ post.post_content }}
-      </div>
+      {{ get_blocks(post.post_content) }}
     </section>
 
   </article>

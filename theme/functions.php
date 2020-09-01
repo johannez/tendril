@@ -1,10 +1,11 @@
 <?php
 
+use Timber\Timber;
 use Tendril\Site;
 
 
 // Load and configure Timber.
-$timber = new Timber\Timber();
+$timber = new Timber();
 
 /**
  * Sets the directories (inside your theme) to find .twig files

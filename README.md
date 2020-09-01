@@ -13,5 +13,6 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 }
 ```
 5. Run `composer run theme` to install the starter theme
+6. Go into the new theme's folder and run `npm install` and then `npm run dev` to make sure your build system is working.
 6. Activate the theme in Wordpress. For more information on the theme have a look at the README.md in the theme directory.
 

@@ -96,7 +96,9 @@ class Site extends TimberSite
      */
     public function addToContext($context) 
     {
-        $context['menu']  = new Menu();
+        $main_menu = new Menu();
+        $context['menu']['main'] = $main_menu->get_items();
+        
         $context['site']  = $this;
 
         $context['options'] = get_fields('option');
