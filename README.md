@@ -1,8 +1,6 @@
 # Tendril
 Wordpress site building with Timber and TailwindCSS
 
-
-
 ## Installation
 
 1. Go to your existing Wordpress site and create a new composer.json file in your root folder. [Example](https://gist.github.com/johannez/be711a101ac2e2d98c58c925579c05ae)
