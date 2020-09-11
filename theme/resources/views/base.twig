@@ -18,6 +18,10 @@
   </head>
 
   <body class="{{ body_class }} text-base md:text-lg font-body pt-16 lg:pt-32" data-template="base.twig">
+    {% if function('function_exists', 'gtm4wp_the_gtm_tag') %}
+      {{ function('gtm4wp_the_gtm_tag') }}
+    {% endif %}
+    
     <a class="skip-link screen-reader-text sr-only" href="#content">{{ __( 'Skip to content') }}</a>
     
     <div id="app">
