@@ -110,13 +110,13 @@ abstract class Migration
 
         if (trim($source_path)) {
             $upload_directory = wp_upload_dir();
-            $filename = esc_sql(basename($source_path));
+            $filename = basename($source_path);
             $dest_url = $upload_directory['url'] . '/' . $filename;
 
             // Check, if image already exists in the system.            
             $image_id = $wpdb->get_var("SELECT ID 
                                 FROM {$wpdb->posts} 
-                                WHERE guid = '$dest_url'");
+                                WHERE post_title = '$filename'");
 
 
             if (!$image_id) {
@@ -133,7 +133,7 @@ abstract class Migration
                     $image = [
                         'guid' => $upload_directory['url'] . '/' . $filename,
                         'post_mime_type' => $file_type['type'],
-                        'post_title'     => $alt ? $alt : $filename,
+                        'post_title'     => $filename,
                         'post_content'   => '',
                         'post_status'    => 'inherit'
                     ];
